@@ -863,6 +863,8 @@ namespace Search {
         cancelMove();
 
         if (score >= probcutBeta) {
+          PieceType captured = piece_type(pos.board[move_to(move)]);
+          addToHistory(captureHistory[pieceTo(pos, bestMove)][captured], stat_bonus(depth - 3));
           ttEntry->store(pos.key, TT::FLAG_LOWER, depth - 3, move, score, ss->staticEval, ttPV, ply);
           return score;
         }
