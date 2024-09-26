@@ -1020,9 +1020,9 @@ namespace Search {
 
       // Late move reductions
 
-      if (depth >= 2 && seenMoves > 1 + 2 * IsRoot) {
+      if (depth >= 2 && seenMoves > 1) {
 
-        int R = lmrTable[depth][seenMoves] / (1 + !isQuiet);
+        int R = lmrTable[depth][seenMoves] / (1 + !isQuiet + IsRoot);
 
         // Reduce or extend depending on history of this move
         R -= history / (isQuiet ? LmrQuietHistoryDiv : LmrCapHistoryDiv);
