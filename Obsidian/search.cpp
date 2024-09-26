@@ -824,7 +824,7 @@ namespace Search {
       && depth <= RfpMaxDepth
       && eval < SCORE_TB_WIN_IN_MAX_PLY
       && eval - std::max(RfpDepthMul * (depth - improving), 20) >= beta)
-      return (eval + beta) / 2;
+      return beta + (eval - beta) / 3;
 
     // Null move pruning. When our evaluation is above beta, we give the opponent
     // a free move, and if we are still better, cut off
