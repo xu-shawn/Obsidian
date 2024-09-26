@@ -21,7 +21,7 @@ namespace Search {
   DEFINE_PARAM_S(LmrBase, 48, 10);
   DEFINE_PARAM_S(LmrDiv, 192, 10);
 
-  DEFINE_PARAM_S(CorrHistWeight, 53, 6);
+  DEFINE_PARAM_S(CorrHistWeight, 64, 6);
   
   DEFINE_PARAM_S(StatBonusBias, -17, 15);
   DEFINE_PARAM_S(StatBonusLinear, 148, 10);
