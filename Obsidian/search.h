@@ -27,6 +27,11 @@ namespace Search {
     }
   };
 
+  enum CorrectionType {
+    SEARCH,
+    QSEARCH
+  };
+
   struct SearchInfo {
     Score staticEval;
     Move playedMove;
@@ -118,6 +123,7 @@ namespace Search {
 
     int getCapHistory(Position& pos, Move move);
 
+    template <CorrectionType correctionType>
     int correctStaticEval(Position &pos, Score staticEval);
 
     void updateHistories(Position& pos, int bonus, Move bestMove, Score bestScore,

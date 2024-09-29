@@ -21,7 +21,8 @@ namespace Search {
   DEFINE_PARAM_S(LmrBase, 48, 10);
   DEFINE_PARAM_S(LmrDiv, 192, 10);
 
-  DEFINE_PARAM_S(CorrHistWeight, 53, 6);
+  DEFINE_PARAM_S(CorrHistWeightSearch, 53, 6);
+  DEFINE_PARAM_S(CorrHistWeightQsearch, 64, 6);
 
   DEFINE_PARAM_S(StatBonusBias, -17, 15);
   DEFINE_PARAM_S(StatBonusLinear, 148, 10);
@@ -338,10 +339,15 @@ namespace Search {
             + (ss - 4)->contHistory[chIndex];
   }
 
+  template <CorrectionType correctionType>
   Score Thread::correctStaticEval(Position &position, Score staticEval){
     int rawPawnCorrection = pawnCorrhist[position.sideToMove][getCorrHistIndex(position.pawnKey)];
 
-    staticEval += CorrHistWeight * rawPawnCorrection / 512;
+    if constexpr (correctionType == SEARCH)
+      staticEval += CorrHistWeightSearch * rawPawnCorrection / 512;
+
+    else
+      staticEval += CorrHistWeightQsearch * rawPawnCorrection / 512;
 
     return std::clamp(staticEval, SCORE_TB_LOSS_IN_MAX_PLY + 1, SCORE_TB_WIN_IN_MAX_PLY - 1);
   }
@@ -520,7 +526,7 @@ namespace Search {
       else
         rawStaticEval = doEvaluation(pos);
 
-      bestScore = ss->staticEval = correctStaticEval(pos, scaleOnHMC(pos, rawStaticEval));
+      bestScore = ss->staticEval = correctStaticEval<QSEARCH>(pos, scaleOnHMC(pos, rawStaticEval));
 
       futility = bestScore + QsFpMargin;
 
@@ -787,7 +793,7 @@ namespace Search {
       else
         rawStaticEval = doEvaluation(pos);
 
-      eval = ss->staticEval = correctStaticEval(pos, scaleOnHMC(pos, rawStaticEval));
+      eval = ss->staticEval = correctStaticEval<SEARCH>(pos, scaleOnHMC(pos, rawStaticEval));
 
       if (!ttHit) {
         // This (probably new) position has just been evaluated.
