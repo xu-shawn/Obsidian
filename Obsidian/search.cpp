@@ -707,7 +707,7 @@ namespace Search {
 
     const bool ttMoveNoisy = ttMove && !pos.isQuiet(ttMove);
 
-    const Score probcutBeta = beta + ProbcutBetaMargin;
+    const Score probcutBeta = beta + ProbcutBetaMargin - 45 * ttMoveNoisy;
 
     Score eval;
     Move bestMove = MOVE_NONE;
